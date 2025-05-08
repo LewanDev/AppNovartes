@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">AppNovartes</string>
+
+    <string name="user">Usuario</string>
+    <string name="password">Contraseña</string>
+    <string name="btn_login">Iniciar Sesión</string>
+
+    <string name="wrong_user_passwd">Usuario o contraseña incorrecta</string>
+    <string name="txt_welcome">¡Bienvenido!</string>
+    <string name="txt_profile">Ver Perfil</string>
+    <string name="txt_search_products">Buscar productos...</string>
+
+</resources>
