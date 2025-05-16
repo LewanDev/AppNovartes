@@ -1,38 +1,35 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:padding="16dp"
-    android:fitsSystemWindows="true"
+    style="@style/CustomLinearLayout.Vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <TextView
-        android:text="Carrito"
-        android:textSize="20sp"
-        android:layout_marginBottom="12dp"
+        android:text="@string/btn_cart"
+        style="@style/TextTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
     <ListView
         android:id="@+id/listCart"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="@dimen/margin_zero"
         android:layout_weight="1"
         android:divider="@android:color/darker_gray"
-        android:dividerHeight="1dp" />
+        android:dividerHeight="@dimen/m_1dp" />
 
     <TextView
         android:id="@+id/txtTotal"
         android:text="Total: $0"
-        android:textSize="16sp"
-        android:layout_marginTop="12dp"
+        style="@style/TextSubtitle"
+        android:layout_marginTop="@dimen/padding_xl"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
     <Button
         android:id="@+id/btnBuy"
-        android:text="Comprar"
-        android:layout_marginTop="16dp"
+        android:text="@string/btn_confirm"
+        style="@style/PrimaryButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

@@ -2,79 +2,160 @@ package com.nmarchelli.appnovartes
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
-import android.widget.Button
-import android.widget.ListView
+import android.widget.ImageButton
+import android.widget.PopupMenu
 import android.widget.SearchView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.nmarchelli.appnovartes.data.api.ApiClient
+import com.nmarchelli.appnovartes.data.model.Articulo
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import android.widget.Filter
+import android.widget.Filterable
+
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var productosFiltrados: List<String>
-    private val productosDisponibles = listOf("Sillón 2 cuerpos", "Silla madera", "Almohadón redondo", "Sillón esquinero", "Silla metálica")
+    private val tag = "MainActivity"
+
+    private lateinit var txtGreeting: TextView
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var adapter: ArticuloAdapter
+    private lateinit var svSearcher: SearchView
+    private lateinit var btnUsuario: ImageButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
 
-        val btnPerfil = findViewById<Button>(R.id.btnProfile)
-        val saludo = findViewById<TextView>(R.id.txtGreeting)
-        val listView = findViewById<ListView>(R.id.listProducts)
-        val buscador = findViewById<SearchView>(R.id.svProductSearch)
-        val btnCarrito = findViewById<Button>(R.id.btnCart)
 
-        saludo.text = getString(R.string.txt_welcome)
+        txtGreeting = findViewById(R.id.txtGreeting)
+        recyclerView = findViewById(R.id.recyclerArticulos)
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        svSearcher = findViewById(R.id.svProductSearch)
+        btnUsuario = findViewById(R.id.btnUser)
+        txtGreeting.text = getString(R.string.txt_welcome)
 
-        productosFiltrados = productosDisponibles
-        actualizarLista(listView, productosFiltrados)
+        getArticulos { articulos ->
+            adapter = ArticuloAdapter(articulos)
+            recyclerView.adapter=adapter
 
-        btnPerfil.setOnClickListener {
-            Toast.makeText(this, "Ir a perfil (pantalla en construcción)", Toast.LENGTH_SHORT).show()
+            svSearcher.setOnQueryTextListener(object: SearchView.OnQueryTextListener{
+                override fun onQueryTextSubmit(query: String?): Boolean =false
+
+                override fun onQueryTextChange(newText: String?): Boolean {
+                    adapter.filter.filter(newText)
+                    return true
+                }
+            })
         }
 
-        buscador.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?) = false
+        svSearcher.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean = false
+
             override fun onQueryTextChange(newText: String?): Boolean {
-                productosFiltrados = productosDisponibles.filter {
-                    it.contains(newText ?: "", ignoreCase = true)
-                }
-                actualizarLista(listView, productosFiltrados)
+                adapter.filter.filter(newText)
                 return true
             }
         })
 
-        listView.setOnItemClickListener { _, _, position, _ ->
-            val productoSeleccionado = Catalog.productos[position]
-            val intent = Intent(this, CustomProductsActivity::class.java)
-            intent.putExtra("producto", productoSeleccionado)
-            startActivity(intent)
-        }
+        btnUsuario.setOnClickListener {
+            val popup = PopupMenu(this, btnUsuario)
+            popup.menuInflater.inflate(R.menu.menu_user, popup.menu)
 
-        btnCarrito.setOnClickListener {
-            startActivity(Intent(this, CartActivity::class.java))
+            popup.setOnMenuItemClickListener { item ->
+                when (item.itemId) {
+                    R.id.menu_profile -> {
+                        startActivity(Intent(this, ProfileActivity::class.java))
+                        true
+                    }
+                    R.id.menu_cart -> {
+                        startActivity(Intent(this, CartActivity::class.java))
+                        true
+                    }
+                    else -> false
+                }
+            }
+
+            popup.show()
         }
 
     }
 
-    private fun actualizarLista(listView: ListView, items: List<String>) {
-        val adapter = object : ArrayAdapter<Product>(
-            this,
-            android.R.layout.simple_list_item_1,
-            Catalog.productos
-        ) {
-            override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-                val view = super.getView(position, convertView, parent) as TextView
-                val producto = getItem(position)
-                view.text = "${producto?.nombre} - $${producto?.precio}"
-                return view
+    private fun getArticulos(onLoaded: (List<Articulo>) -> Unit) {
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val response = ApiClient.apiService.getArticulos()
+                if (response.isSuccessful) {
+                    val articulos = response.body() ?: emptyList()
+                    withContext(Dispatchers.Main) {
+                        onLoaded(articulos)
+                    }
+                }
+            } catch (e: Exception) {
+                Log.e("API", "Error: ${e.message}")
             }
         }
-
-        listView.adapter = adapter
     }
+
+
+    class ArticuloAdapter(private val listaOriginal: List<Articulo>) :
+        RecyclerView.Adapter<ArticuloAdapter.ArticuloViewHolder>(), Filterable {
+
+        private var listaFiltrada: List<Articulo> = listaOriginal
+
+        class ArticuloViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+            val nombre: TextView = itemView.findViewById(R.id.textNombre)
+            val precio: TextView = itemView.findViewById(R.id.textCodigo)
+        }
+
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ArticuloViewHolder {
+            val view = LayoutInflater.from(parent.context)
+                .inflate(R.layout.item_articulo, parent, false)
+            return ArticuloViewHolder(view)
+        }
+
+        override fun onBindViewHolder(holder: ArticuloViewHolder, position: Int) {
+            val articulo = listaFiltrada[position]
+            holder.nombre.text = articulo.descripcion
+            holder.precio.text = "#${articulo.codigo}"
+        }
+
+        override fun getItemCount(): Int = listaFiltrada.size
+
+        override fun getFilter(): Filter {
+            return object : Filter() {
+                override fun performFiltering(query: CharSequence?): FilterResults {
+                    val filtro = query.toString().lowercase().trim()
+                    val resultados = if (filtro.isEmpty()) {
+                        listaOriginal
+                    } else {
+                        listaOriginal.filter {
+                            it.descripcion.lowercase().contains(filtro) || it.descripcion.lowercase().contains(filtro)
+                        }
+                    }
+                    val filterResults = FilterResults()
+                    filterResults.values = resultados
+                    return filterResults
+                }
+
+                override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
+                    listaFiltrada = results?.values as List<Articulo>
+                    notifyDataSetChanged()
+                }
+            }
+        }
+    }
+
+
 }

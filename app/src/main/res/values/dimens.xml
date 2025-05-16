@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="margin_zero">0dp</dimen>
+    <dimen name="m_1dp">1dp</dimen>
+
+    <!-- Heights -->
+    <dimen name="height_sm">36dp</dimen>
+    <dimen name="height_md">48dp</dimen>
+
+    <!-- Margins -->
+    <dimen name="margin_small">8dp</dimen>
+    <dimen name="margin_medium">16dp</dimen>
+    <dimen name="margin_large">24dp</dimen>
+
+    <!-- Padding -->
+    <dimen name="padding_xs">4dp</dimen>
+    <dimen name="padding_sm">6dp</dimen>
+    <dimen name="padding_md">8dp</dimen>
+    <dimen name="padding_lg">10dp</dimen>
+    <dimen name="padding_xl">12dp</dimen>
+
+    <!-- Text sizes -->
+    <dimen name="text_title">24sp</dimen>
+    <dimen name="text_subtitle">18sp</dimen>
+    <dimen name="text_body">16sp</dimen>
+
+</resources>

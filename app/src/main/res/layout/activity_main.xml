@@ -1,45 +1,46 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    android:padding="16dp">
+    style="@style/CustomLinearLayout.Vertical">
 
     <LinearLayout
         android:orientation="horizontal"
+        android:gravity="center"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <TextView
             android:id="@+id/txtGreeting"
             android:text="@string/txt_welcome"
-            android:textSize="20sp"
+            style="@style/TextTitle"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingBottom="8dp" />
-        <Button
-            android:id="@+id/btnCart"
-            android:text="Ver carrito"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"/>
+            android:layout_height="wrap_content" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+        <ImageButton
+            android:id="@+id/btnUser"
+            android:layout_width="@dimen/height_md"
+            android:layout_height="@dimen/height_md"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_user"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/btn_user_menu"/>
+
     </LinearLayout>
 
-    <Button
-        android:id="@+id/btnProfile"
-        android:text="@string/txt_profile"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp" />
-
-    <SearchView
+    <android.widget.SearchView
         android:id="@+id/svProductSearch"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:queryHint="@string/txt_search_products" />
 
-    <ListView
-        android:id="@+id/listProducts"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerArticulos"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"

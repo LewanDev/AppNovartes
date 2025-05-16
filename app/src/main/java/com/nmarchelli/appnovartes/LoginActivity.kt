@@ -13,27 +13,27 @@ class LoginActivity : AppCompatActivity() {
     private val adminUser = "admin"
     private val adminPasswd = "123"
 
-
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_login)
 
-        checkIfUserIsLogged()
 
         val etUser = findViewById<EditText>(R.id.edtUsuario)
         val etPassword = findViewById<EditText>(R.id.edtContrasena)
         val btnLogin = findViewById<Button>(R.id.btnLogin)
 
+        checkIfUserIsLogged()
+
         btnLogin.setOnClickListener {
             val user = etUser.text.toString()
             val passwd = etPassword.text.toString()
 
+            //todo: validate with DB
             if (user == adminUser && passwd == adminPasswd) {
                 val prefs = getSharedPreferences(spSession, MODE_PRIVATE)
-                prefs.edit { putBoolean(spSessionIsLogged, true) }
+                prefs.edit { putBoolean(spSessionIsLoggedKey, true) }
+                prefs.edit { putString(spUserNameKey, user)}
                 startActivity(Intent(this, MainActivity::class.java))
                 finish()
             } else {
@@ -44,7 +44,7 @@ class LoginActivity : AppCompatActivity() {
 
     private fun checkIfUserIsLogged() {
         val prefs = getSharedPreferences(spSession, MODE_PRIVATE)
-        if (prefs.getBoolean(spSessionIsLogged, false)) {
+        if (prefs.getBoolean(spSessionIsLoggedKey, false)) {
             startActivity(Intent(this, MainActivity::class.java))
             finish()
         }

@@ -9,6 +9,18 @@
     <string name="wrong_user_passwd">Usuario o contraseña incorrecta</string>
     <string name="txt_welcome">¡Bienvenido!</string>
     <string name="txt_profile">Ver Perfil</string>
-    <string name="txt_search_products">Buscar productos...</string>
+    <string name="txt_search_products">Buscar productos…</string>
 
+    <string name="btn_cart">Ver Carrito</string>
+    <string name="btn_add_cart">Agregar al Carrito</string>
+    <string name="btn_user_menu">Menú de Usuario</string>
+
+    <string name="txt_fabric_type">Tipo de tela</string>
+    <string name="txt_fabric_color">Color de tela</string>
+    <string name="txt_leg_type">Tipo de patas</string>
+    <string name="txt_leg_color">Color de patas</string>
+    <string name="txt_measurement">Medidas</string>
+    <string name="txt_sewing_type">Tipo de costura</string>
+
+    <string name="btn_confirm">Confirmar</string>
 </resources>

@@ -8,6 +8,19 @@
     <string name="wrong_user_passwd">Wrong user or password</string>
     <string name="txt_welcome">Welcome!</string>
     <string name="txt_profile">Profile</string>
-    <string name="txt_search_products">Search products...</string>
+    <string name="txt_search_products">Search products…</string>
+
+    <string name="btn_cart">Cart</string>
+    <string name="btn_add_cart">Add to Cart</string>
+    <string name="btn_user_menu">User Menu</string>
+
+    <string name="txt_fabric_type">Fabric type</string>
+    <string name="txt_fabric_color">Fabric color</string>
+    <string name="txt_leg_type">Legs type</string>
+    <string name="txt_leg_color">Legs color</string>
+    <string name="txt_measurement">Measurements</string>
+    <string name="txt_sewing_type">Sewing type</string>
+
+    <string name="btn_confirm">Confirm</string>
 
 </resources>

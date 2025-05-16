@@ -9,7 +9,6 @@ class CustomProductsActivity : AppCompatActivity() {
 
     private lateinit var nombreProducto: String
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
