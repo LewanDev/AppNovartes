@@ -1,0 +1,183 @@
+package com.nmarchelli.appnovartes.ui
+
+import android.os.Bundle
+import android.util.Log
+import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.Spinner
+import android.widget.TextView
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
+import com.nmarchelli.appnovartes.R
+import com.nmarchelli.appnovartes.data.api.ApiClient
+import com.nmarchelli.appnovartes.data.model.Articulo
+import com.nmarchelli.appnovartes.data.model.Rubro
+import kotlinx.coroutines.launch
+
+class ProductActivity : AppCompatActivity() {
+
+    private lateinit var txtNombre: TextView
+    private lateinit var txtCodigo: TextView
+
+    private lateinit var spTelas: Spinner
+    private lateinit var spTelas2: Spinner
+
+    private lateinit var spPatas: Spinner
+    private lateinit var spPatas2: Spinner
+
+    private lateinit var rubros: List<Rubro>
+    private lateinit var articulos: List<Articulo>
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_product)
+
+        txtNombre = findViewById(R.id.txtNombreProduct)
+        txtCodigo = findViewById(R.id.txtCodigoProduct)
+
+        spTelas = findViewById(R.id.spTelasProduct)
+        spTelas2 = findViewById(R.id.spTelas2Product)
+
+        spPatas = findViewById(R.id.spPatasProduct)
+        spPatas2 = findViewById(R.id.spPatas2Product)
+
+        getArticulos()
+        getRubros()
+
+        val id = intent.getIntExtra("id", -1)
+        val nombre = intent.getStringExtra("descripcion")
+        val codigo = intent.getStringExtra("codigo")
+        val categoria = intent.getStringExtra("categoria")
+
+        txtNombre.text = nombre ?: "Sin nombre"
+        txtCodigo.text = "#$codigo"
+        spPatas2.isEnabled = false
+        spTelas2.isEnabled = false
+    }
+
+    private fun getRubros() {
+        lifecycleScope.launch {
+            try {
+                val response = ApiClient.apiService.getRubros()
+                if (response.isSuccessful) {
+                    rubros = response.body() ?: emptyList()
+                    Log.i("ProductAct", "$rubros")
+
+                    val rubrosPatas = listOf(getString(R.string.sp_option)) +
+                            rubros.filter { it.pata == 1 && it._borrado == 0 }
+                                .map { it.descripcion }
+                    val rubrosTelas = listOf(getString(R.string.sp_option)) +
+                            rubros.filter { it.tela == 1 && it._borrado == 0 }
+                                .map { it.descripcion }
+
+                    val adapterPatas =
+                        ArrayAdapter(this@ProductActivity, R.layout.item_spinner, rubrosPatas)
+                    adapterPatas.setDropDownViewResource(R.layout.item_spinner_dropdown)
+                    spPatas.adapter = adapterPatas
+
+                    val adapterTelas =
+                        ArrayAdapter(this@ProductActivity, R.layout.item_spinner, rubrosTelas)
+                    adapterTelas.setDropDownViewResource(R.layout.item_spinner_dropdown)
+                    spTelas.adapter = adapterTelas
+
+                    spPatas.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                        override fun onItemSelected(
+                            parent: AdapterView<*>,
+                            view: View?,
+                            position: Int,
+                            id: Long
+                        ) {
+                            if (position == 0) {
+                                spPatas2.adapter = null
+                                return
+                            }
+                            spPatas2.isEnabled = true
+                            val rubroSeleccionado = rubros.filter { it.pata == 1 }[position - 1]
+                            val articulosFiltrados =
+                                articulos.filter { it.rubro == rubroSeleccionado.codigo }
+
+                            val nombresArticulos = articulosFiltrados.map { it.descripcion }
+
+                            val adapterArticulos = ArrayAdapter(
+                                this@ProductActivity,
+                                R.layout.item_spinner,
+                                nombresArticulos
+                            )
+                            adapterArticulos.setDropDownViewResource(R.layout.item_spinner_dropdown)
+                            spPatas2.adapter = adapterArticulos
+                        }
+
+                        override fun onNothingSelected(parent: AdapterView<*>) {}
+                    }
+
+                    spTelas.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                        override fun onItemSelected(
+                            parent: AdapterView<*>,
+                            view: View?,
+                            position: Int,
+                            id: Long
+                        ) {
+                            if (position == 0) {
+                                spTelas2.adapter = null
+                                return
+                            }
+                            spTelas2.isEnabled = true
+                            val rubroSeleccionado = rubros.filter { it.tela == 1 }[position - 1]
+                            val articulosFiltrados =
+                                articulos.filter { it.rubro == rubroSeleccionado.codigo }
+
+                            val nombresArticulos = articulosFiltrados.map { it.descripcion }
+
+                            val adapterArticulos = ArrayAdapter(
+                                this@ProductActivity,
+                                R.layout.item_spinner,
+                                nombresArticulos
+                            )
+                            adapterArticulos.setDropDownViewResource(R.layout.item_spinner_dropdown)
+                            spTelas2.adapter = adapterArticulos
+                        }
+
+                        override fun onNothingSelected(parent: AdapterView<*>) {}
+                    }
+
+
+                } else {
+                    Toast.makeText(
+                        this@ProductActivity,
+                        "Error al obtener rubros",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            } catch (e: Exception) {
+                Toast.makeText(this@ProductActivity, "Error: ${e.message}", Toast.LENGTH_SHORT)
+                    .show()
+            }
+        }
+
+
+    }
+
+    private fun getArticulos() {
+        lifecycleScope.launch {
+            try {
+                val response = ApiClient.apiService.getArticulos()
+                if (response.isSuccessful) {
+                    articulos = response.body() ?: emptyList()
+                } else {
+                    Toast.makeText(
+                        this@ProductActivity,
+                        "Error al obtener artículos",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            } catch (e: Exception) {
+                Toast.makeText(this@ProductActivity, "Error: ${e.message}", Toast.LENGTH_SHORT)
+                    .show()
+            }
+        }
+    }
+
+
+}

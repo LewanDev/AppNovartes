@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/CustomLinearLayout.Vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.ProductActivity">
+
+    <include layout="@layout/toolbar_back" />
+
+    <LinearLayout
+        style="@style/CustomLinearLayout.Vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/txtNombreProduct"
+            style="@style/TextTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/txt_product_name" />
+
+        <TextView
+            android:id="@+id/txtCodigoProduct"
+            style="@style/TextSubtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/txt_product_code" />
+    </LinearLayout>
+
+    <LinearLayout
+        style="@style/CustomLinearLayout.Vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/padding_md"
+            android:text="@string/txt_product_cloth" />
+
+        <Spinner
+            android:id="@+id/spTelasProduct"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/padding_lg" />
+
+        <Spinner
+            android:id="@+id/spTelas2Product"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        style="@style/CustomLinearLayout.Vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/padding_md"
+            android:text="@string/txt_product_leg" />
+
+        <Spinner
+            android:id="@+id/spPatasProduct"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/padding_lg" />
+
+        <Spinner
+            android:id="@+id/spPatas2Product"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+</LinearLayout>

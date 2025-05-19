@@ -32,7 +32,8 @@ class Articulo(
     val customizable: Boolean
 )
 
-class ArticuloAdapter(private val listaOriginal: List<Articulo>) :
+class ArticuloAdapter(private val listaOriginal: List<Articulo>,
+                      private val onItemClick: (Articulo) -> Unit) :
     RecyclerView.Adapter<ArticuloAdapter.ArticuloViewHolder>(), Filterable {
 
     private var listaFiltrada: List<Articulo> = listaOriginal
@@ -52,6 +53,10 @@ class ArticuloAdapter(private val listaOriginal: List<Articulo>) :
         val articulo = listaFiltrada[position]
         holder.nombre.text = articulo.descripcion
         holder.precio.text = "#${articulo.codigo}"
+
+        holder.itemView.setOnClickListener {
+            onItemClick(articulo)
+        }
     }
 
     override fun getItemCount(): Int = listaFiltrada.size

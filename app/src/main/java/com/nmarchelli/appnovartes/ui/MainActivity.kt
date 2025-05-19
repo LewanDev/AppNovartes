@@ -44,7 +44,17 @@ class MainActivity : AppCompatActivity() {
         txtGreeting.text = getString(R.string.txt_welcome)
 
         getArticulos { articulos ->
-            adapter = ArticuloAdapter(articulos)
+            adapter = ArticuloAdapter(articulos) { articuloSeleccionado ->
+                val intent = Intent(this, ProductActivity::class.java).apply {
+                    putExtra("id", articuloSeleccionado.id)
+                    putExtra("descripcion", articuloSeleccionado.descripcion)
+                    putExtra("codigo", articuloSeleccionado.codigo)
+                    putExtra("rubro", articuloSeleccionado.rubro)
+                    putExtra("subrubro", articuloSeleccionado.subrubro)
+                }
+                startActivity(intent)
+            }
+
             recyclerView.adapter=adapter
 
             svSearcher.setOnQueryTextListener(object: SearchView.OnQueryTextListener{

@@ -5,6 +5,9 @@
     <string name="password">Password</string>
     <string name="btn_login">Login</string>
 
+    <string name="txt_back">Back</string>
+    <string name="txt_title">Title</string>
+
     <string name="wrong_user_passwd">Wrong user or password</string>
     <string name="txt_welcome">Welcome!</string>
     <string name="txt_profile">Profile</string>
@@ -20,6 +23,15 @@
     <string name="txt_leg_color">Legs color</string>
     <string name="txt_measurement">Measurements</string>
     <string name="txt_sewing_type">Sewing type</string>
+
+    <string name="txt_product_name">Product name</string>
+    <string name="txt_product_code">Product code</string>
+    <string name="txt_product_category">Category</string>
+    <string name="txt_product_subcategory">Subcategory</string>
+    <string name="txt_product_cloth">Cloth</string>
+    <string name="txt_product_leg">Legs</string>
+
+    <string name="sp_option">Choose an option…</string>
 
     <string name="btn_confirm">Confirm</string>
 

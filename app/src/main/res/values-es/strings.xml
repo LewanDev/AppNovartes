@@ -6,6 +6,9 @@
     <string name="password">Contraseña</string>
     <string name="btn_login">Iniciar Sesión</string>
 
+    <string name="txt_back">Volver</string>
+    <string name="txt_title">Título</string>
+
     <string name="wrong_user_passwd">Usuario o contraseña incorrecta</string>
     <string name="txt_welcome">¡Bienvenido!</string>
     <string name="txt_profile">Ver Perfil</string>
@@ -21,6 +24,14 @@
     <string name="txt_leg_color">Color de patas</string>
     <string name="txt_measurement">Medidas</string>
     <string name="txt_sewing_type">Tipo de costura</string>
+
+    <string name="txt_product_name">Nombre del producto</string>
+    <string name="txt_product_code">Código del producto</string>
+    <string name="txt_product_category">Rubro</string>
+    <string name="txt_product_subcategory">SubRubro</string>
+    <string name="txt_product_cloth">Tela</string>
+    <string name="txt_product_leg">Patas</string>
+    <string name="sp_option">Elija una opción…</string>
 
     <string name="btn_confirm">Confirmar</string>
 </resources>
