@@ -1,11 +1,8 @@
-package com.nmarchelli.appnovartes
+package com.nmarchelli.appnovartes.ui
 
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.PopupMenu
 import android.widget.SearchView
@@ -14,14 +11,14 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.nmarchelli.appnovartes.R
 import com.nmarchelli.appnovartes.data.api.ApiClient
 import com.nmarchelli.appnovartes.data.model.Articulo
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import android.widget.Filter
-import android.widget.Filterable
+import com.nmarchelli.appnovartes.data.model.ArticuloAdapter
 
 
 class MainActivity : AppCompatActivity() {
@@ -80,7 +77,7 @@ class MainActivity : AppCompatActivity() {
                         true
                     }
                     R.id.menu_cart -> {
-                        startActivity(Intent(this, CartActivity::class.java))
+                        //startActivity(Intent(this, CartActivity::class.java))
                         true
                     }
                     else -> false
@@ -109,53 +106,7 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    class ArticuloAdapter(private val listaOriginal: List<Articulo>) :
-        RecyclerView.Adapter<ArticuloAdapter.ArticuloViewHolder>(), Filterable {
 
-        private var listaFiltrada: List<Articulo> = listaOriginal
-
-        class ArticuloViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-            val nombre: TextView = itemView.findViewById(R.id.textNombre)
-            val precio: TextView = itemView.findViewById(R.id.textCodigo)
-        }
-
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ArticuloViewHolder {
-            val view = LayoutInflater.from(parent.context)
-                .inflate(R.layout.item_articulo, parent, false)
-            return ArticuloViewHolder(view)
-        }
-
-        override fun onBindViewHolder(holder: ArticuloViewHolder, position: Int) {
-            val articulo = listaFiltrada[position]
-            holder.nombre.text = articulo.descripcion
-            holder.precio.text = "#${articulo.codigo}"
-        }
-
-        override fun getItemCount(): Int = listaFiltrada.size
-
-        override fun getFilter(): Filter {
-            return object : Filter() {
-                override fun performFiltering(query: CharSequence?): FilterResults {
-                    val filtro = query.toString().lowercase().trim()
-                    val resultados = if (filtro.isEmpty()) {
-                        listaOriginal
-                    } else {
-                        listaOriginal.filter {
-                            it.descripcion.lowercase().contains(filtro) || it.descripcion.lowercase().contains(filtro)
-                        }
-                    }
-                    val filterResults = FilterResults()
-                    filterResults.values = resultados
-                    return filterResults
-                }
-
-                override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
-                    listaFiltrada = results?.values as List<Articulo>
-                    notifyDataSetChanged()
-                }
-            }
-        }
-    }
 
 
 }
