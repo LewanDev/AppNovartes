@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">AppNovartes</string>
 
+    <string name="text_nine3">999</string>
+
     <string name="user">User</string>
     <string name="password">Password</string>
     <string name="btn_login">Login</string>
@@ -30,6 +32,8 @@
     <string name="txt_product_subcategory">Subcategory</string>
     <string name="txt_product_cloth">Cloth</string>
     <string name="txt_product_leg">Legs</string>
+    <string name="txt_observations">Observations</string>
+    <string name="txt_addtocart">Add to Cart</string>
 
     <string name="sp_option">Choose an option…</string>
 

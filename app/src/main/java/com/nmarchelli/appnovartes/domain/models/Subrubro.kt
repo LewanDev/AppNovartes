@@ -1,4 +1,4 @@
-package com.nmarchelli.appnovartes.data.model
+package com.nmarchelli.appnovartes.domain.models
 
 class Subrubro(
     val id: Int,

@@ -1,4 +1,4 @@
-package com.nmarchelli.appnovartes.data.api
+package com.nmarchelli.appnovartes.data.remote
 
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory

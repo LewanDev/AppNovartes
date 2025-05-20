@@ -2,6 +2,8 @@
 <resources>
     <string name="app_name">AppNovartes</string>
 
+    <string name="text_nine3">999</string>
+
     <string name="user">Usuario</string>
     <string name="password">Contraseña</string>
     <string name="btn_login">Iniciar Sesión</string>
@@ -32,6 +34,9 @@
     <string name="txt_product_cloth">Tela</string>
     <string name="txt_product_leg">Patas</string>
     <string name="sp_option">Elija una opción…</string>
+    <string name="txt_observations">Observaciones</string>
+    <string name="txt_addtocart">Agregar al carrito</string>
+
 
     <string name="btn_confirm">Confirmar</string>
 </resources>

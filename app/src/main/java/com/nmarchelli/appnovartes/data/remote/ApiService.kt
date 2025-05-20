@@ -1,7 +1,7 @@
-package com.nmarchelli.appnovartes.data.api
+package com.nmarchelli.appnovartes.data.remote
 
-import com.nmarchelli.appnovartes.data.model.Articulo
-import com.nmarchelli.appnovartes.data.model.Rubro
+import com.nmarchelli.appnovartes.domain.models.Articulo
+import com.nmarchelli.appnovartes.domain.models.Rubro
 import retrofit2.Response
 import retrofit2.http.GET
 

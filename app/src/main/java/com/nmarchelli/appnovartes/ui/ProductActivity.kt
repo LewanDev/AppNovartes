@@ -5,21 +5,27 @@ import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Button
+import android.widget.EditText
+import android.widget.ImageView
 import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.nmarchelli.appnovartes.R
-import com.nmarchelli.appnovartes.data.api.ApiClient
-import com.nmarchelli.appnovartes.data.model.Articulo
-import com.nmarchelli.appnovartes.data.model.Rubro
+import com.nmarchelli.appnovartes.data.remote.ApiClient
+import com.nmarchelli.appnovartes.domain.models.Articulo
+import com.nmarchelli.appnovartes.domain.models.Rubro
 import kotlinx.coroutines.launch
 
 class ProductActivity : AppCompatActivity() {
 
+    //region >> Variables
+    private lateinit var btnBack: ImageView
     private lateinit var txtNombre: TextView
     private lateinit var txtCodigo: TextView
+    private lateinit var btnAdd: Button
 
     private lateinit var spTelas: Spinner
     private lateinit var spTelas2: Spinner
@@ -30,10 +36,60 @@ class ProductActivity : AppCompatActivity() {
     private lateinit var rubros: List<Rubro>
     private lateinit var articulos: List<Articulo>
 
+    private lateinit var btnMenos: ImageView
+    private lateinit var btnMas: ImageView
+    private lateinit var etCantidad: EditText
+    //endregion
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_product)
 
+        setVariables()
+        getArticulos()
+        getRubros()
+
+        val id = intent.getIntExtra("id", -1)
+        val nombre = intent.getStringExtra("descripcion")
+        val codigo = intent.getStringExtra("codigo")
+        val categoria = intent.getStringExtra("categoria")
+        val stockMax = intent.getIntExtra("stock", 1)
+
+        etCantidad.setText("1")
+        txtNombre.text = nombre ?: "Sin nombre"
+        txtCodigo.text = "#$codigo"
+        spPatas2.isEnabled = false
+        spTelas2.isEnabled = false
+        btnAdd.isEnabled = false
+
+        btnBack.setOnClickListener {
+            this.finish()
+        }
+
+        btnAdd.setOnClickListener {
+
+        }
+
+        btnMenos.setOnClickListener {
+            val cantidadActual = etCantidad.text.toString().toIntOrNull() ?: 1
+            if (cantidadActual > 1) {
+                etCantidad.setText((cantidadActual - 1).toString())
+            }
+        }
+
+        btnMas.setOnClickListener {
+            val cantidadActual = etCantidad.text.toString().toIntOrNull() ?: 1
+            if (cantidadActual < stockMax) {
+                etCantidad.setText((cantidadActual + 1).toString())
+            } else {
+                Toast.makeText(this, "Cantidad máxima disponible: $stockMax", Toast.LENGTH_SHORT)
+                    .show()
+            }
+        }
+    }
+
+    private fun setVariables() {
+        btnBack = findViewById(R.id.btnBack)
         txtNombre = findViewById(R.id.txtNombreProduct)
         txtCodigo = findViewById(R.id.txtCodigoProduct)
 
@@ -43,18 +99,11 @@ class ProductActivity : AppCompatActivity() {
         spPatas = findViewById(R.id.spPatasProduct)
         spPatas2 = findViewById(R.id.spPatas2Product)
 
-        getArticulos()
-        getRubros()
+        btnMenos = findViewById(R.id.imgMenosProduct)
+        btnMas = findViewById(R.id.imgMasProduct)
+        etCantidad = findViewById(R.id.etCantidadProduct)
 
-        val id = intent.getIntExtra("id", -1)
-        val nombre = intent.getStringExtra("descripcion")
-        val codigo = intent.getStringExtra("codigo")
-        val categoria = intent.getStringExtra("categoria")
-
-        txtNombre.text = nombre ?: "Sin nombre"
-        txtCodigo.text = "#$codigo"
-        spPatas2.isEnabled = false
-        spTelas2.isEnabled = false
+        btnAdd = findViewById(R.id.btnAddToCartProduct)
     }
 
     private fun getRubros() {
@@ -91,13 +140,12 @@ class ProductActivity : AppCompatActivity() {
                         ) {
                             if (position == 0) {
                                 spPatas2.adapter = null
+                                checkSpinners()
                                 return
                             }
                             spPatas2.isEnabled = true
                             val rubroSeleccionado = rubros.filter { it.pata == 1 }[position - 1]
-                            val articulosFiltrados =
-                                articulos.filter { it.rubro == rubroSeleccionado.codigo }
-
+                            val articulosFiltrados = articulos.filter { it.rubro == rubroSeleccionado.codigo }
                             val nombresArticulos = articulosFiltrados.map { it.descripcion }
 
                             val adapterArticulos = ArrayAdapter(
@@ -107,6 +155,8 @@ class ProductActivity : AppCompatActivity() {
                             )
                             adapterArticulos.setDropDownViewResource(R.layout.item_spinner_dropdown)
                             spPatas2.adapter = adapterArticulos
+
+                            checkSpinners()
                         }
 
                         override fun onNothingSelected(parent: AdapterView<*>) {}
@@ -121,13 +171,12 @@ class ProductActivity : AppCompatActivity() {
                         ) {
                             if (position == 0) {
                                 spTelas2.adapter = null
+                                checkSpinners()
                                 return
                             }
                             spTelas2.isEnabled = true
                             val rubroSeleccionado = rubros.filter { it.tela == 1 }[position - 1]
-                            val articulosFiltrados =
-                                articulos.filter { it.rubro == rubroSeleccionado.codigo }
-
+                            val articulosFiltrados = articulos.filter { it.rubro == rubroSeleccionado.codigo }
                             val nombresArticulos = articulosFiltrados.map { it.descripcion }
 
                             val adapterArticulos = ArrayAdapter(
@@ -137,6 +186,8 @@ class ProductActivity : AppCompatActivity() {
                             )
                             adapterArticulos.setDropDownViewResource(R.layout.item_spinner_dropdown)
                             spTelas2.adapter = adapterArticulos
+
+                            checkSpinners()
                         }
 
                         override fun onNothingSelected(parent: AdapterView<*>) {}
@@ -177,6 +228,14 @@ class ProductActivity : AppCompatActivity() {
                     .show()
             }
         }
+    }
+
+    private fun checkSpinners() {
+        val opcionInvalida = getString(R.string.sp_option)
+        val valido = spPatas.selectedItem.toString() != opcionInvalida &&
+                spTelas.selectedItem.toString() != opcionInvalida
+
+        btnAdd.isEnabled = valido
     }
 
 

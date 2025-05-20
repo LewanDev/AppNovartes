@@ -1,4 +1,4 @@
-package com.nmarchelli.appnovartes.data.model
+package com.nmarchelli.appnovartes.domain.models
 
 class Usuario(
     val id: Int,

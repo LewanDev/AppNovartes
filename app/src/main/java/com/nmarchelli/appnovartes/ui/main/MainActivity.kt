@@ -1,4 +1,4 @@
-package com.nmarchelli.appnovartes.ui
+package com.nmarchelli.appnovartes.ui.main
 
 import android.content.Intent
 import android.os.Bundle
@@ -12,13 +12,18 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.nmarchelli.appnovartes.R
-import com.nmarchelli.appnovartes.data.api.ApiClient
-import com.nmarchelli.appnovartes.data.model.Articulo
+import com.nmarchelli.appnovartes.data.local.AppDatabase
+import com.nmarchelli.appnovartes.data.remote.ApiClient
+import com.nmarchelli.appnovartes.data.repository.ArticuloRepository
+import com.nmarchelli.appnovartes.domain.mappers.toDomainList
+import com.nmarchelli.appnovartes.domain.models.Articulo
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import com.nmarchelli.appnovartes.data.model.ArticuloAdapter
+import com.nmarchelli.appnovartes.domain.models.ArticuloAdapter
+import com.nmarchelli.appnovartes.ui.ProductActivity
+import com.nmarchelli.appnovartes.ui.ProfileActivity
 
 
 class MainActivity : AppCompatActivity() {
@@ -30,11 +35,16 @@ class MainActivity : AppCompatActivity() {
     private lateinit var svSearcher: SearchView
     private lateinit var btnUsuario: ImageButton
 
+    private lateinit var repo: ArticuloRepository
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
 
+        val db = AppDatabase.getInstance(this)
+        repo = ArticuloRepository(ApiClient.apiService, db.articuloDao())
 
         txtGreeting = findViewById(R.id.txtGreeting)
         recyclerView = findViewById(R.id.recyclerArticulos)
@@ -42,6 +52,8 @@ class MainActivity : AppCompatActivity() {
         svSearcher = findViewById(R.id.svProductSearch)
         btnUsuario = findViewById(R.id.btnUser)
         txtGreeting.text = getString(R.string.txt_welcome)
+
+
 
         getArticulos { articulos ->
             adapter = ArticuloAdapter(articulos) { articuloSeleccionado ->
@@ -51,6 +63,7 @@ class MainActivity : AppCompatActivity() {
                     putExtra("codigo", articuloSeleccionado.codigo)
                     putExtra("rubro", articuloSeleccionado.rubro)
                     putExtra("subrubro", articuloSeleccionado.subrubro)
+                    putExtra("stock", articuloSeleccionado.stockmax)
                 }
                 startActivity(intent)
             }
@@ -87,7 +100,7 @@ class MainActivity : AppCompatActivity() {
                         true
                     }
                     R.id.menu_cart -> {
-                        //startActivity(Intent(this, CartActivity::class.java))
+                        // startActivity(Intent(this, CartActivity::class.java))
                         true
                     }
                     else -> false
@@ -101,21 +114,52 @@ class MainActivity : AppCompatActivity() {
 
     private fun getArticulos(onLoaded: (List<Articulo>) -> Unit) {
         CoroutineScope(Dispatchers.IO).launch {
-            try {
-                val response = ApiClient.apiService.getArticulos()
-                if (response.isSuccessful) {
-                    val articulos = response.body() ?: emptyList()
-                    withContext(Dispatchers.Main) {
-                        onLoaded(articulos)
+            val articulos = withContext(Dispatchers.IO) {
+                val local = repo.getArticulosLocal().toDomainList()
+                if (local.isNotEmpty()) {
+                    local
+                } else {
+                    try {
+                        val remote = repo.getArticulos()
+                        repo.insertAll(remote)
+                        remote
+                    } catch (e: Exception) {
+                        Log.e(tag, "Error al obtener artículos de la API: ${e.message}")
+                        emptyList()
                     }
                 }
-            } catch (e: Exception) {
-                Log.e("API", "Error: ${e.message}")
+            }
+
+            withContext(Dispatchers.Main) {
+                onLoaded(articulos)
             }
         }
     }
 
 
+
+    private fun setupRecycler(articulos: List<Articulo>) {
+        adapter = ArticuloAdapter(articulos) { articuloSeleccionado ->
+            val intent = Intent(this, ProductActivity::class.java).apply {
+                putExtra("id", articuloSeleccionado.id)
+                putExtra("descripcion", articuloSeleccionado.descripcion)
+                putExtra("codigo", articuloSeleccionado.codigo)
+                putExtra("rubro", articuloSeleccionado.rubro)
+                putExtra("subrubro", articuloSeleccionado.subrubro)
+            }
+            startActivity(intent)
+        }
+
+        recyclerView.adapter = adapter
+
+        svSearcher.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean = false
+            override fun onQueryTextChange(newText: String?): Boolean {
+                adapter.filter.filter(newText)
+                return true
+            }
+        })
+    }
 
 
 

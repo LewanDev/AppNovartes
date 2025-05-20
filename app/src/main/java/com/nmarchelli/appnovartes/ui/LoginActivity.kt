@@ -12,6 +12,7 @@ import com.nmarchelli.appnovartes.R
 import com.nmarchelli.appnovartes.spSession
 import com.nmarchelli.appnovartes.spSessionIsLoggedKey
 import com.nmarchelli.appnovartes.spUserNameKey
+import com.nmarchelli.appnovartes.ui.main.MainActivity
 
 class LoginActivity : AppCompatActivity() {
     private val adminUser = "admin"

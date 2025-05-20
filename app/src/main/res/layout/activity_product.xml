@@ -34,6 +34,7 @@
         android:layout_height="wrap_content">
 
         <TextView
+            style="@style/TextSubtitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/padding_md"
@@ -52,7 +53,6 @@
             android:id="@+id/spTelas2Product"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
-
     </LinearLayout>
 
     <LinearLayout
@@ -61,6 +61,7 @@
         android:layout_height="wrap_content">
 
         <TextView
+            style="@style/TextSubtitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/padding_md"
@@ -80,4 +81,55 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </LinearLayout>
+
+    <LinearLayout
+        style="@style/CustomLinearLayout.Vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            style="@style/CustomLinearLayout.Horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/imgMenosProduct"
+                android:layout_width="@dimen/height_sm"
+                android:layout_height="@dimen/height_sm"
+                android:src="@drawable/icon_minus" />
+
+            <EditText
+                android:id="@+id/etCantidadProduct"
+                android:layout_width="@dimen/width_sm"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/padding_lg"
+                android:layout_marginEnd="@dimen/padding_lg"
+                android:clickable="false"
+                android:cursorVisible="false"
+                android:focusable="false"
+                android:inputType="none"
+                android:textAlignment="center"
+                android:textSize="@dimen/text_title_lg" />
+
+            <ImageView
+                android:id="@+id/imgMasProduct"
+                android:layout_width="@dimen/height_sm"
+                android:layout_height="@dimen/height_sm"
+                android:src="@drawable/icon_add" />
+        </LinearLayout>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:hint="@string/txt_observations"
+            android:lines="4" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btnAddToCartProduct"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/txt_addtocart" />
 </LinearLayout>

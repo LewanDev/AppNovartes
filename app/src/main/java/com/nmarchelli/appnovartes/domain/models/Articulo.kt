@@ -1,4 +1,4 @@
-package com.nmarchelli.appnovartes.data.model
+package com.nmarchelli.appnovartes.domain.models
 
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +8,7 @@ import android.widget.Filterable
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.nmarchelli.appnovartes.R
+import com.nmarchelli.appnovartes.data.local.entities.ArticuloEntity
 
 class Articulo(
     val id: Int,
@@ -78,9 +79,63 @@ class ArticuloAdapter(private val listaOriginal: List<Articulo>,
             }
 
             override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
-                listaFiltrada = results?.values as List<Articulo>
+                (results?.values as List<Articulo>).also { listaFiltrada = it }
                 notifyDataSetChanged()
             }
         }
     }
+}
+
+fun Articulo.toEntity(): ArticuloEntity {
+    return ArticuloEntity(
+        id = id,
+        codigo = codigo,
+        descripcion = descripcion,
+        rubro = rubro,
+        subrubro = subrubro,
+        descripcion_larga = descripcion_larga,
+        destacado = destacado,
+        _borrado = _borrado,
+        actualizacion = actualizacion,
+        UxB = UxB,
+        cod_bar_unidad = cod_bar_unidad,
+        cod_bar_pack = cod_bar_pack,
+        cod_bar_bulto = cod_bar_bulto,
+        UxP = UxP,
+        creado = creado,
+        nodisponible = nodisponible,
+        stockmax = stockmax,
+        principal = principal,
+        complemento = complemento,
+        customizable = customizable
+    )
+}
+
+fun ArticuloEntity.toDomain(): Articulo {
+    return Articulo(
+        id = id,
+        codigo = codigo,
+        descripcion = descripcion,
+        rubro = rubro,
+        subrubro = subrubro,
+        descripcion_larga = descripcion_larga,
+        destacado = destacado,
+        _borrado = _borrado,
+        actualizacion = actualizacion,
+        UxB = UxB,
+        cod_bar_unidad = cod_bar_unidad,
+        cod_bar_pack = cod_bar_pack,
+        cod_bar_bulto = cod_bar_bulto,
+        UxP = UxP,
+        creado = creado,
+        nodisponible = nodisponible,
+        stockmax = stockmax,
+        principal = principal,
+        complemento = complemento,
+        customizable = customizable
+    )
+}
+
+fun List<ArticuloEntity>.toDomainList(): List<Articulo> {
+    return map { it.toDomain() }
 }
