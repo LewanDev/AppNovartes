@@ -26,12 +26,16 @@
 
         <EditText
             android:id="@+id/edtUsuario"
+            android:textSize="@dimen/text_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/user" />
-
+        <View
+            android:layout_height="@dimen/margin_md"
+            android:layout_width="match_parent"/>
         <EditText
             android:id="@+id/edtContrasena"
+            android:textSize="@dimen/text_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/password"

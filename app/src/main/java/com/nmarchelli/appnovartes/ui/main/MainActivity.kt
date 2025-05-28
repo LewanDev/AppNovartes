@@ -9,6 +9,7 @@ import android.widget.SearchView
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.nmarchelli.appnovartes.R
@@ -40,19 +41,27 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContentView(R.layout.activity_main)
 
         val db = AppDatabase.getInstance(this)
         repo = ArticuloRepository(ApiClient.apiService, db.articuloDao())
 
-        txtGreeting = findViewById(R.id.txtGreeting)
-        recyclerView = findViewById(R.id.recyclerArticulos)
-        recyclerView.layoutManager = LinearLayoutManager(this)
-        svSearcher = findViewById(R.id.svProductSearch)
-        btnUser = findViewById(R.id.btnUser)
-        txtGreeting.text = getString(R.string.txt_welcome)
+        setVariables()
 
+
+
+        lifecycleScope.launch {
+            val cliente = db.clienteDao().getCliente()
+
+            if (cliente != null) {
+                /*txtGreeting.text = buildString {
+                    append(getString(R.string.txt_welcome))
+                    append(" ")
+                    append(cliente.nombreCliente)
+                }*/
+                txtGreeting.text = cliente.nombreCliente
+            }
+        }
 
 
         getArticulos { articulos ->
@@ -136,8 +145,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-
-
     private fun setupRecycler(articulos: List<Articulo>) {
         adapter = ArticuloAdapter(articulos) { articuloSeleccionado ->
             val intent = Intent(this, ProductActivity::class.java).apply {
@@ -161,6 +168,13 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
+    private fun setVariables() {
+        txtGreeting = findViewById(R.id.txtGreeting)
+        recyclerView = findViewById(R.id.recyclerArticulos)
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        svSearcher = findViewById(R.id.svProductSearch)
+        btnUser = findViewById(R.id.btnUser)
+    }
 
 
 }

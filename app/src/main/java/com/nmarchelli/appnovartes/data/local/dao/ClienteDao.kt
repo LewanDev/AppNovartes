@@ -13,4 +13,7 @@ interface ClienteDao {
 
     @Query("SELECT * FROM clientes LIMIT 1")
     suspend fun getCliente(): ClienteEntity?
+
+    @Query("DELETE FROM clientes")
+    suspend fun deleteAll()
 }

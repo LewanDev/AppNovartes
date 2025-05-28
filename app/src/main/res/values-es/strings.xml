@@ -13,11 +13,11 @@
     <string name="txt_title">Título</string>
 
     <string name="wrong_user_passwd">Usuario o contraseña incorrecta</string>
-    <string name="txt_welcome">¡Bienvenido!</string>
-    <string name="txt_profile">Ver Perfil</string>
+    <string name="txt_welcome">Bienvenido</string>
+    <string name="txt_profile">Perfil</string>
     <string name="txt_search_products">Buscar productos…</string>
 
-    <string name="btn_cart">Ver Carrito</string>
+    <string name="btn_cart">Carrito</string>
     <string name="btn_add_cart">Agregar al Carrito</string>
     <string name="btn_user_menu">Menú de Usuario</string>
 
@@ -40,6 +40,12 @@
     <string name="txt_observations">Observaciones</string>
     <string name="txt_addtocart">Agregar al carrito</string>
 
+    <string name="txt_profile_title">Datos del cliente</string>
+    <string name="txt_profile_name">Nombre</string>
+    <string name="txt_profile_mail">Email</string>
+    <string name="txt_profile_ctacte">Saldo</string>
+
 
     <string name="btn_confirm">Confirmar</string>
+    <string name="btn_logout">Cerrar Sesión</string>
 </resources>

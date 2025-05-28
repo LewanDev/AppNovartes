@@ -12,7 +12,7 @@
     <string name="txt_title">Title</string>
 
     <string name="wrong_user_passwd">Wrong user or password</string>
-    <string name="txt_welcome">Welcome!</string>
+    <string name="txt_welcome">Welcome</string>
     <string name="txt_profile">Profile</string>
     <string name="txt_search_products">Search products…</string>
 
@@ -40,6 +40,12 @@
 
     <string name="sp_option">Choose an option…</string>
 
+    <string name="txt_profile_title">Client data</string>
+    <string name="txt_profile_name">Name</string>
+    <string name="txt_profile_mail">Email</string>
+    <string name="txt_profile_ctacte">Balance</string>
+
     <string name="btn_confirm">Confirm</string>
+    <string name="btn_logout">Logout</string>
 
 </resources>

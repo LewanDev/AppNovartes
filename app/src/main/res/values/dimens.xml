@@ -10,9 +10,9 @@
     <dimen name="height_md">48dp</dimen>
 
     <!-- Margins -->
-    <dimen name="margin_small">8dp</dimen>
-    <dimen name="margin_medium">16dp</dimen>
-    <dimen name="margin_large">24dp</dimen>
+    <dimen name="margin_sm">8dp</dimen>
+    <dimen name="margin_md">16dp</dimen>
+    <dimen name="margin_lg">24dp</dimen>
 
     <!-- Padding -->
     <dimen name="padding_xs">4dp</dimen>

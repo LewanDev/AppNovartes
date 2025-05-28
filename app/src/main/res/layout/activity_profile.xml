@@ -1,13 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    style="@style/CustomLinearLayout.Vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    style="@style/CustomLinearLayout.Vertical"
     tools:context=".ui.ProfileActivity">
 
-    <TextView
-        android:text="PERFIL LOCO"
+    <include layout="@layout/toolbar_back" />
+
+    <LinearLayout
+        style="@style/CustomLinearLayout.Vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content">
+
+        <TextView
+            style="@style/TextSubtitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/txt_profile_name" />
+
+        <TextView
+            android:id="@+id/txtProfileName"
+            style="@style/TextTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/padding_xl" />
+
+        <TextView
+            style="@style/TextSubtitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/txt_profile_mail" />
+
+        <TextView
+            android:id="@+id/txtProfileMail"
+            style="@style/TextTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/padding_xl" />
+
+        <TextView
+            style="@style/TextSubtitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/txt_profile_ctacte" />
+
+        <TextView
+            android:id="@+id/txtProfileBalance"
+            style="@style/TextTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <Button
+        style="@style/RedButton"
+        android:id="@+id/btnLogout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/btn_logout" />
 </LinearLayout>
