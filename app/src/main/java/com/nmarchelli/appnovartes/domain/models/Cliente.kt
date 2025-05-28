@@ -13,6 +13,7 @@ class Cliente(
     val domicilio: String,
     val mail: String,
     val telefono: String,
+    val ctacte: Float,
     val creado: String,
     val actualizacion: String,
     val _borrado: Boolean

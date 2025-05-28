@@ -23,6 +23,8 @@ class ProductActivity : AppCompatActivity() {
 
     //region >> Variables
     private lateinit var btnBack: ImageView
+    private lateinit var txtTitle: TextView
+
     private lateinit var txtNombre: TextView
     private lateinit var txtCodigo: TextView
     private lateinit var btnAdd: Button
@@ -39,6 +41,12 @@ class ProductActivity : AppCompatActivity() {
     private lateinit var btnMenos: ImageView
     private lateinit var btnMas: ImageView
     private lateinit var etCantidad: EditText
+
+    private var idProducto: Int = 0
+    private lateinit var nombreProducto: String
+    private lateinit var codigoProducto: String
+    private lateinit var categoriaProducto: String
+    private var stockMaxProducto: Int = 0
     //endregion
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,26 +56,15 @@ class ProductActivity : AppCompatActivity() {
         setVariables()
         getArticulos()
         getRubros()
+        setProductosActivity()
 
-        val id = intent.getIntExtra("id", -1)
-        val nombre = intent.getStringExtra("descripcion")
-        val codigo = intent.getStringExtra("codigo")
-        val categoria = intent.getStringExtra("categoria")
-        val stockMax = intent.getIntExtra("stock", 1)
-
-        etCantidad.setText("1")
-        txtNombre.text = nombre ?: "Sin nombre"
-        txtCodigo.text = "#$codigo"
-        spPatas2.isEnabled = false
-        spTelas2.isEnabled = false
-        btnAdd.isEnabled = false
 
         btnBack.setOnClickListener {
             this.finish()
         }
 
         btnAdd.setOnClickListener {
-
+            //Add to cart
         }
 
         btnMenos.setOnClickListener {
@@ -79,17 +76,35 @@ class ProductActivity : AppCompatActivity() {
 
         btnMas.setOnClickListener {
             val cantidadActual = etCantidad.text.toString().toIntOrNull() ?: 1
-            if (cantidadActual < stockMax) {
+            if (cantidadActual < stockMaxProducto) {
                 etCantidad.setText((cantidadActual + 1).toString())
             } else {
-                Toast.makeText(this, "Cantidad máxima disponible: $stockMax", Toast.LENGTH_SHORT)
+                Toast.makeText(this, "Cantidad máxima disponible: $stockMaxProducto", Toast.LENGTH_SHORT)
                     .show()
             }
         }
     }
 
+    private fun setProductosActivity() {
+        txtTitle.text = getString(R.string.txt_product_title)
+        idProducto = intent.getIntExtra("id", -1)
+        nombreProducto = intent.getStringExtra("descripcion").toString()
+        codigoProducto = intent.getStringExtra("codigo").toString()
+        categoriaProducto = intent.getStringExtra("categoria").toString()
+        stockMaxProducto = intent.getIntExtra("stock", 1)
+
+        etCantidad.setText("1")
+        txtNombre.text = nombreProducto ?: "Sin nombre"
+        txtCodigo.text = "#$codigoProducto"
+        spPatas2.isEnabled = false
+        spTelas2.isEnabled = false
+        btnAdd.isEnabled = false
+    }
+
     private fun setVariables() {
         btnBack = findViewById(R.id.btnBack)
+        txtTitle = findViewById(R.id.txtTitleNavBar)
+
         txtNombre = findViewById(R.id.txtNombreProduct)
         txtCodigo = findViewById(R.id.txtCodigoProduct)
 

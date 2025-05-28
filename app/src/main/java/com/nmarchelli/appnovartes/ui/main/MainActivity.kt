@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: ArticuloAdapter
     private lateinit var svSearcher: SearchView
-    private lateinit var btnUsuario: ImageButton
+    private lateinit var btnUser: ImageButton
 
     private lateinit var repo: ArticuloRepository
 
@@ -50,7 +50,7 @@ class MainActivity : AppCompatActivity() {
         recyclerView = findViewById(R.id.recyclerArticulos)
         recyclerView.layoutManager = LinearLayoutManager(this)
         svSearcher = findViewById(R.id.svProductSearch)
-        btnUsuario = findViewById(R.id.btnUser)
+        btnUser = findViewById(R.id.btnUser)
         txtGreeting.text = getString(R.string.txt_welcome)
 
 
@@ -89,8 +89,8 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-        btnUsuario.setOnClickListener {
-            val popup = PopupMenu(this, btnUsuario)
+        btnUser.setOnClickListener {
+            val popup = PopupMenu(this, btnUser)
             popup.menuInflater.inflate(R.menu.menu_user, popup.menu)
 
             popup.setOnMenuItemClickListener { item ->

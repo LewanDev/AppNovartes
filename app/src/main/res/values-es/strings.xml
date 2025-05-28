@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">AppNovartes</string>
+    <string name="logo">Logo</string>
 
     <string name="text_nine3">999</string>
 
@@ -27,6 +28,8 @@
     <string name="txt_measurement">Medidas</string>
     <string name="txt_sewing_type">Tipo de costura</string>
 
+    <string name="txt_product">Producto</string>
+    <string name="txt_product_title">Personalizar producto</string>
     <string name="txt_product_name">Nombre del producto</string>
     <string name="txt_product_code">Código del producto</string>
     <string name="txt_product_category">Rubro</string>
