@@ -14,9 +14,18 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.nmarchelli.appnovartes.R
+import com.nmarchelli.appnovartes.data.local.AppDatabase
+import com.nmarchelli.appnovartes.data.local.entities.CartItemEntity
 import com.nmarchelli.appnovartes.data.remote.ApiClient
 import com.nmarchelli.appnovartes.domain.models.Articulo
+import com.nmarchelli.appnovartes.KEY_CATEGORY
+import com.nmarchelli.appnovartes.KEY_CODE
+import com.nmarchelli.appnovartes.KEY_DESCRIPTION
+import com.nmarchelli.appnovartes.KEY_ID
+import com.nmarchelli.appnovartes.KEY_STOCK
 import com.nmarchelli.appnovartes.domain.models.Rubro
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class ProductActivity : AppCompatActivity() {
@@ -53,8 +62,10 @@ class ProductActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_product)
 
+        val db = AppDatabase.getInstance(applicationContext)
+
         setVariables()
-        getArticulos()
+        getArticulo()
         getRubros()
         setProductosActivity()
 
@@ -65,6 +76,37 @@ class ProductActivity : AppCompatActivity() {
 
         btnAdd.setOnClickListener {
             //Add to cart
+            val _cantidad = etCantidad.text.toString().toIntOrNull() ?: 1
+
+            val cartItem = CartItemEntity(
+                codigo = codigoProducto,
+                nombre = nombreProducto,
+                telas = spTelas.selectedItem.toString(),
+                telas2 = spTelas2.selectedItem.toString(),
+                patas = spPatas.selectedItem.toString(),
+                patas2 = spPatas2.selectedItem.toString(),
+                cantidad = _cantidad,
+                productoId = idProducto
+            )
+
+            CoroutineScope(Dispatchers.IO).launch {
+
+                val existing = db.cartDao().getItemByCodigo(codigoProducto)
+
+                if (existing != null) {
+                    val nuevaCantidad = existing.cantidad + _cantidad
+                    db.cartDao().updateCantidad(codigoProducto, nuevaCantidad)
+                } else {
+                    db.cartDao().insertItem(cartItem)
+                }
+                Log.d("CART", "Item insertado con ID: ${cartItem.id}")
+            }
+
+
+
+            Toast.makeText(this, getString(R.string.txt_product_added_tocart), Toast.LENGTH_SHORT)
+                .show()
+            finish()
         }
 
         btnMenos.setOnClickListener {
@@ -79,7 +121,11 @@ class ProductActivity : AppCompatActivity() {
             if (cantidadActual < stockMaxProducto) {
                 etCantidad.setText((cantidadActual + 1).toString())
             } else {
-                Toast.makeText(this, "Cantidad máxima disponible: $stockMaxProducto", Toast.LENGTH_SHORT)
+                Toast.makeText(
+                    this,
+                    getString(R.string.txt_max_quantity) + stockMaxProducto,
+                    Toast.LENGTH_SHORT
+                )
                     .show()
             }
         }
@@ -87,14 +133,14 @@ class ProductActivity : AppCompatActivity() {
 
     private fun setProductosActivity() {
         txtTitle.text = getString(R.string.txt_product_title)
-        idProducto = intent.getIntExtra("id", -1)
-        nombreProducto = intent.getStringExtra("descripcion").toString()
-        codigoProducto = intent.getStringExtra("codigo").toString()
-        categoriaProducto = intent.getStringExtra("categoria").toString()
-        stockMaxProducto = intent.getIntExtra("stock", 1)
+        idProducto = intent.getIntExtra(KEY_ID, -1)
+        nombreProducto = intent.getStringExtra(KEY_DESCRIPTION).toString()
+        codigoProducto = intent.getStringExtra(KEY_CODE).toString()
+        categoriaProducto = intent.getStringExtra(KEY_CATEGORY).toString()
+        stockMaxProducto = intent.getIntExtra(KEY_STOCK, 1)
 
         etCantidad.setText("1")
-        txtNombre.text = nombreProducto ?: "Sin nombre"
+        txtNombre.text = nombreProducto
         txtCodigo.text = "#$codigoProducto"
         spPatas2.isEnabled = false
         spTelas2.isEnabled = false
@@ -102,7 +148,7 @@ class ProductActivity : AppCompatActivity() {
     }
 
     private fun setVariables() {
-        btnBack = findViewById(R.id.btnBack)
+        btnBack = findViewById(R.id.btnBackNavBar)
         txtTitle = findViewById(R.id.txtTitleNavBar)
 
         txtNombre = findViewById(R.id.txtNombreProduct)
@@ -160,7 +206,8 @@ class ProductActivity : AppCompatActivity() {
                             }
                             spPatas2.isEnabled = true
                             val rubroSeleccionado = rubros.filter { it.pata == 1 }[position - 1]
-                            val articulosFiltrados = articulos.filter { it.rubro == rubroSeleccionado.codigo }
+                            val articulosFiltrados =
+                                articulos.filter { it.rubro == rubroSeleccionado.codigo }
                             val nombresArticulos = articulosFiltrados.map { it.descripcion }
 
                             val adapterArticulos = ArrayAdapter(
@@ -191,7 +238,8 @@ class ProductActivity : AppCompatActivity() {
                             }
                             spTelas2.isEnabled = true
                             val rubroSeleccionado = rubros.filter { it.tela == 1 }[position - 1]
-                            val articulosFiltrados = articulos.filter { it.rubro == rubroSeleccionado.codigo }
+                            val articulosFiltrados =
+                                articulos.filter { it.rubro == rubroSeleccionado.codigo }
                             val nombresArticulos = articulosFiltrados.map { it.descripcion }
 
                             val adapterArticulos = ArrayAdapter(
@@ -225,7 +273,7 @@ class ProductActivity : AppCompatActivity() {
 
     }
 
-    private fun getArticulos() {
+    private fun getArticulo() {
         lifecycleScope.launch {
             try {
                 val response = ApiClient.apiService.getArticulos()

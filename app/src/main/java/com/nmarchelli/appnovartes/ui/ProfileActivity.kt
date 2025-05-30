@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
 import androidx.lifecycle.lifecycleScope
@@ -13,7 +12,6 @@ import com.nmarchelli.appnovartes.R
 import com.nmarchelli.appnovartes.data.local.AppDatabase
 import com.nmarchelli.appnovartes.spSession
 import com.nmarchelli.appnovartes.spSessionIsLoggedKey
-import com.nmarchelli.appnovartes.spUserNameKey
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -76,7 +74,7 @@ class ProfileActivity : AppCompatActivity() {
         txtEmail = findViewById(R.id.txtProfileMail)
         txtBalance = findViewById(R.id.txtProfileBalance)
 
-        btnBack = findViewById(R.id.btnBack)
+        btnBack = findViewById(R.id.btnBackNavBar)
         btnLogout = findViewById(R.id.btnLogout)
     }
 }

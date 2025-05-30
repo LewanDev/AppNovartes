@@ -4,6 +4,7 @@
     <string name="logo">Logo</string>
 
     <string name="text_nine3">999</string>
+    <string name="text_exone">x1</string>
 
     <string name="user">Usuario</string>
     <string name="password">Contraseña</string>
@@ -15,6 +16,8 @@
     <string name="wrong_user_passwd">Usuario o contraseña incorrecta</string>
     <string name="txt_welcome">Bienvenido</string>
     <string name="txt_profile">Perfil</string>
+
+    <string name="txt_list_products">Listado de productos</string>
     <string name="txt_search_products">Buscar productos…</string>
 
     <string name="btn_cart">Carrito</string>
@@ -40,6 +43,11 @@
     <string name="txt_observations">Observaciones</string>
     <string name="txt_addtocart">Agregar al carrito</string>
 
+    <string name="txt_max_quantity">Cantidad máxima disponible: </string>
+    <string name="txt_product_added_tocart">Producto agregado al carrito</string>
+    <string name="txt_product_deleted">Producto eliminado</string>
+    <string name="btn_confirm_buy">Confirmar compra</string>
+
     <string name="txt_profile_title">Datos del cliente</string>
     <string name="txt_profile_name">Nombre</string>
     <string name="txt_profile_mail">Email</string>
@@ -48,4 +56,8 @@
 
     <string name="btn_confirm">Confirmar</string>
     <string name="btn_logout">Cerrar Sesión</string>
+    <string name="btn_back">Volver</string>
+    <string name="txt_yes">Si</string>
+    <string name="txt_no">No</string>
+    <string name="txt_search">Buscar</string>
 </resources>

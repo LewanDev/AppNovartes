@@ -3,15 +3,21 @@ package com.nmarchelli.appnovartes.ui.main
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.ImageButton
 import android.widget.PopupMenu
 import android.widget.SearchView
 import android.widget.TextView
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.nmarchelli.appnovartes.KEY_CATEGORY
+import com.nmarchelli.appnovartes.KEY_CODE
+import com.nmarchelli.appnovartes.KEY_DESCRIPTION
+import com.nmarchelli.appnovartes.KEY_ID
+import com.nmarchelli.appnovartes.KEY_STOCK
+import com.nmarchelli.appnovartes.KEY_SUBCATEGORY
 import com.nmarchelli.appnovartes.R
 import com.nmarchelli.appnovartes.data.local.AppDatabase
 import com.nmarchelli.appnovartes.data.remote.ApiClient
@@ -23,6 +29,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import com.nmarchelli.appnovartes.domain.models.ArticuloAdapter
+import com.nmarchelli.appnovartes.ui.CartActivity
 import com.nmarchelli.appnovartes.ui.ProductActivity
 import com.nmarchelli.appnovartes.ui.ProfileActivity
 
@@ -35,9 +42,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var adapter: ArticuloAdapter
     private lateinit var svSearcher: SearchView
     private lateinit var btnUser: ImageButton
-
     private lateinit var repo: ArticuloRepository
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,19 +51,14 @@ class MainActivity : AppCompatActivity() {
         val db = AppDatabase.getInstance(this)
         repo = ArticuloRepository(ApiClient.apiService, db.articuloDao())
 
-        setVariables()
-
-
+        initVariables()
+        svSearcher.setIconifiedByDefault(false)
+        svSearcher.isIconified = false
 
         lifecycleScope.launch {
             val cliente = db.clienteDao().getCliente()
 
             if (cliente != null) {
-                /*txtGreeting.text = buildString {
-                    append(getString(R.string.txt_welcome))
-                    append(" ")
-                    append(cliente.nombreCliente)
-                }*/
                 txtGreeting.text = cliente.nombreCliente
             }
         }
@@ -67,12 +67,12 @@ class MainActivity : AppCompatActivity() {
         getArticulos { articulos ->
             adapter = ArticuloAdapter(articulos) { articuloSeleccionado ->
                 val intent = Intent(this, ProductActivity::class.java).apply {
-                    putExtra("id", articuloSeleccionado.id)
-                    putExtra("descripcion", articuloSeleccionado.descripcion)
-                    putExtra("codigo", articuloSeleccionado.codigo)
-                    putExtra("rubro", articuloSeleccionado.rubro)
-                    putExtra("subrubro", articuloSeleccionado.subrubro)
-                    putExtra("stock", articuloSeleccionado.stockmax)
+                    putExtra(KEY_ID, articuloSeleccionado.id)
+                    putExtra(KEY_DESCRIPTION, articuloSeleccionado.descripcion)
+                    putExtra(KEY_CODE, articuloSeleccionado.codigo)
+                    putExtra(KEY_CATEGORY, articuloSeleccionado.rubro)
+                    putExtra(KEY_SUBCATEGORY, articuloSeleccionado.subrubro)
+                    putExtra(KEY_STOCK, articuloSeleccionado.stockmax)
                 }
                 startActivity(intent)
             }
@@ -109,7 +109,7 @@ class MainActivity : AppCompatActivity() {
                         true
                     }
                     R.id.menu_cart -> {
-                        // startActivity(Intent(this, CartActivity::class.java))
+                        startActivity(Intent(this, CartActivity::class.java))
                         true
                     }
                     else -> false
@@ -168,7 +168,7 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
-    private fun setVariables() {
+    private fun initVariables() {
         txtGreeting = findViewById(R.id.txtGreeting)
         recyclerView = findViewById(R.id.recyclerArticulos)
         recyclerView.layoutManager = LinearLayoutManager(this)

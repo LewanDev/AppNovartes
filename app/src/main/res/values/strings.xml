@@ -3,6 +3,7 @@
     <string name="logo">Logo</string>
 
     <string name="text_nine3">999</string>
+    <string name="text_exone">x1</string>
 
     <string name="user">User</string>
     <string name="password">Password</string>
@@ -14,6 +15,8 @@
     <string name="wrong_user_passwd">Wrong user or password</string>
     <string name="txt_welcome">Welcome</string>
     <string name="txt_profile">Profile</string>
+
+    <string name="txt_list_products">Products list</string>
     <string name="txt_search_products">Search products…</string>
 
     <string name="btn_cart">Cart</string>
@@ -38,6 +41,11 @@
     <string name="txt_observations">Observations</string>
     <string name="txt_addtocart">Add to Cart</string>
 
+    <string name="txt_max_quantity">Maximum stock available: </string>
+    <string name="txt_product_added_tocart">Product added to cart</string>
+    <string name="txt_product_deleted">Product deleted</string>
+    <string name="btn_confirm_buy">Confirm purchase</string>
+
     <string name="sp_option">Choose an option…</string>
 
     <string name="txt_profile_title">Client data</string>
@@ -47,5 +55,9 @@
 
     <string name="btn_confirm">Confirm</string>
     <string name="btn_logout">Logout</string>
+    <string name="btn_back">Back</string>
+    <string name="txt_yes">Yes</string>
+    <string name="txt_no">No</string>
+    <string name="txt_search">Search</string>
 
 </resources>
