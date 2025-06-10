@@ -8,5 +8,4 @@ class Rubro(
     val actualizacion: String?,
     val _borrado: Int,
     val creado: String
-) {
-}
+)

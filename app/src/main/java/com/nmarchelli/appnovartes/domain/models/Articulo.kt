@@ -18,7 +18,8 @@ class Articulo(
     val rubro: String?,
     val subrubro: String?,
     val destacado: Boolean,
-    val _borrado: Boolean,
+    //val _borrado: Boolean,
+    val _borrado: Int,
     val actualizacion: String, //DATETIME
     val UxB: Int,
     val cod_bar_unidad: String,
@@ -109,33 +110,4 @@ fun Articulo.toEntity(): ArticuloEntity {
         complemento = complemento,
         customizable = customizable
     )
-}
-
-fun ArticuloEntity.toDomain(): Articulo {
-    return Articulo(
-        id = id,
-        codigo = codigo,
-        descripcion = descripcion,
-        rubro = rubro,
-        subrubro = subrubro,
-        descripcion_larga = descripcion_larga,
-        destacado = destacado,
-        _borrado = _borrado,
-        actualizacion = actualizacion,
-        UxB = UxB,
-        cod_bar_unidad = cod_bar_unidad,
-        cod_bar_pack = cod_bar_pack,
-        cod_bar_bulto = cod_bar_bulto,
-        UxP = UxP,
-        creado = creado,
-        nodisponible = nodisponible,
-        stockmax = stockmax,
-        principal = principal,
-        complemento = complemento,
-        customizable = customizable
-    )
-}
-
-fun List<ArticuloEntity>.toDomainList(): List<Articulo> {
-    return map { it.toDomain() }
 }

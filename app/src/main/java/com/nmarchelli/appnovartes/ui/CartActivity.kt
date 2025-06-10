@@ -1,5 +1,8 @@
 package com.nmarchelli.appnovartes.ui
 
+import android.content.ActivityNotFoundException
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
@@ -7,6 +10,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.nmarchelli.appnovartes.R
@@ -39,15 +43,38 @@ class CartActivity : AppCompatActivity() {
 
         setVariables()
         loadCartItems()
+        getClienteData()
 
         btnConfirmBuy.setOnClickListener {
             //Confirm buy
-
+            CoroutineScope(Dispatchers.IO).launch {
+                val configsMap = getConfiguraciones()
+                val body = setMailBodyText(db)
+                withContext(Dispatchers.Main) {
+                    sendMailFromAndroidOS(
+                        this@CartActivity,
+                        configsMap["email"].toString(), "Pedido App - Cliente Nro: "+configsMap["codigo"], body
+                    )
+                }
+            }
         }
 
         btnBack.setOnClickListener {
             finish()
         }
+    }
+
+    private fun getClienteData() {
+        lifecycleScope.launch {
+
+        }
+    }
+
+    private suspend fun getConfiguraciones(): Map<String, String> {
+        val list = listOf("email", "nombre", "domicilio", "codigo")
+        val configs = db.configuracionDao().getConfiguraciones(list)
+        return configs.associate { it.variable to it.valor }
+
     }
 
     private fun setVariables() {
@@ -84,8 +111,63 @@ class CartActivity : AppCompatActivity() {
             val updatedItems = db.cartDao().getAllItems()
             withContext(Dispatchers.Main) {
                 adapter.updateData(updatedItems)
-                Toast.makeText(this@CartActivity, getString(R.string.txt_product_deleted), Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this@CartActivity,
+                    getString(R.string.txt_product_deleted),
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
     }
+
+    suspend fun setMailBodyText(db: AppDatabase): String {
+        val items = db.cartDao().getAllItems()
+        val cliente = db.clienteDao().getCliente()
+
+        if (cliente != null) {
+            val sbClienteData = StringBuilder()
+            sbClienteData.append("Datos del Cliente")
+            sbClienteData.append("Nombre: " + cliente.nombreCliente + ", Documento: " + cliente.numeroDto + "\r\n")
+            sbClienteData.append("Domicilio: " + cliente.domicilio + "\r\n")
+            sbClienteData.append("Email: " + cliente.mail + ", Teléfono: " + cliente.telefono + "\r\n")
+            sbClienteData.append("\r\n")
+        }
+
+        if (items.isNotEmpty()) {
+            val sbItemsCart = StringBuilder()
+            sbItemsCart.append("Detalle del pedido:\n\n")
+            items.forEach { item ->
+                sbItemsCart.append("Producto: ${item.nombre}\n")
+                sbItemsCart.append("Código: ${item.codigo}\n")
+                sbItemsCart.append("Cantidad: ${item.cantidad}\n")
+                sbItemsCart.append("Telas: ${item.telas}, ${item.telas2}\n")
+                sbItemsCart.append("Patas: ${item.patas}, ${item.patas2}\n")
+                sbItemsCart.append("\n")
+            }
+            return sbItemsCart.toString()
+        } else {
+            return "El carrito está vacío."
+        }
+    }
+
+    fun sendMailFromAndroidOS(
+        context: Context,
+        destinatario: String,
+        asunto: String,
+        cuerpo: String
+    ) {
+        val intent = Intent(Intent.ACTION_SEND).apply {
+            type = "message/rfc822" // Solo apps de mail
+            putExtra(Intent.EXTRA_EMAIL, arrayOf(destinatario))
+            putExtra(Intent.EXTRA_SUBJECT, asunto)
+            putExtra(Intent.EXTRA_TEXT, cuerpo)
+        }
+        try {
+            context.startActivity(Intent.createChooser(intent, "Enviar mail..."))
+        } catch (e: ActivityNotFoundException) {
+            Toast.makeText(context, "No hay cliente de correo instalado", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+
 }

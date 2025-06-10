@@ -205,9 +205,10 @@ class ProductActivity : AppCompatActivity() {
                                 return
                             }
                             spPatas2.isEnabled = true
-                            val rubroSeleccionado = rubros.filter { it.pata == 1 }[position - 1]
+                            val rubroSeleccionado =
+                                rubros.filter { it.pata == 1 && it._borrado == 0 }[position - 1]
                             val articulosFiltrados =
-                                articulos.filter { it.rubro == rubroSeleccionado.codigo }
+                                articulos.filter { it.rubro == rubroSeleccionado.codigo && it._borrado == 0 }
                             val nombresArticulos = articulosFiltrados.map { it.descripcion }
 
                             val adapterArticulos = ArrayAdapter(
@@ -237,10 +238,16 @@ class ProductActivity : AppCompatActivity() {
                                 return
                             }
                             spTelas2.isEnabled = true
-                            val rubroSeleccionado = rubros.filter { it.tela == 1 }[position - 1]
-                            val articulosFiltrados =
-                                articulos.filter { it.rubro == rubroSeleccionado.codigo }
-                            val nombresArticulos = articulosFiltrados.map { it.descripcion }
+                            val rubroSeleccionado =
+                                rubros.filter { it.tela == 1 && it._borrado == 0 }[position - 1]
+                            val articulosFiltrados = articulos.filter {
+                                it.rubro == rubroSeleccionado.codigo && it._borrado == 0
+                            }
+                            val nombresArticulos = if (articulosFiltrados.isEmpty()) {
+                                listOf("")
+                            } else {
+                                articulosFiltrados.map { it.descripcion }
+                            }
 
                             val adapterArticulos = ArrayAdapter(
                                 this@ProductActivity,
@@ -255,8 +262,6 @@ class ProductActivity : AppCompatActivity() {
 
                         override fun onNothingSelected(parent: AdapterView<*>) {}
                     }
-
-
                 } else {
                     Toast.makeText(
                         this@ProductActivity,

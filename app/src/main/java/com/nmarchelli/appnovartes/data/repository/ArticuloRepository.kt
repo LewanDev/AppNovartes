@@ -11,7 +11,6 @@ class ArticuloRepository(
     private val dao: ArticuloDao
 ) {
 
-    // Obtener desde la API y mapear a modelo de dominio
     suspend fun getArticulos(): List<Articulo> {
         val response = api.getArticulos()
         if (response.isSuccessful) {
@@ -21,12 +20,10 @@ class ArticuloRepository(
         }
     }
 
-    // Obtener desde Room y devolver entidades
     suspend fun getArticulosLocal(): List<ArticuloEntity> {
         return dao.getAll()
     }
 
-    // Guardar en Room
     suspend fun insertAll(articulos: List<Articulo>) {
         dao.insertAll(articulos.map { it.toEntity() })
     }

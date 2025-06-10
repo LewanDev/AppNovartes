@@ -3,7 +3,6 @@ package com.nmarchelli.appnovartes.ui.main
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import android.widget.ImageButton
 import android.widget.PopupMenu
 import android.widget.SearchView
@@ -22,6 +21,7 @@ import com.nmarchelli.appnovartes.R
 import com.nmarchelli.appnovartes.data.local.AppDatabase
 import com.nmarchelli.appnovartes.data.remote.ApiClient
 import com.nmarchelli.appnovartes.data.repository.ArticuloRepository
+import com.nmarchelli.appnovartes.data.repository.ConfiguracionRepository
 import com.nmarchelli.appnovartes.domain.mappers.toDomainList
 import com.nmarchelli.appnovartes.domain.models.Articulo
 import kotlinx.coroutines.CoroutineScope
@@ -29,6 +29,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import com.nmarchelli.appnovartes.domain.models.ArticuloAdapter
+import com.nmarchelli.appnovartes.domain.models.Configuracion
 import com.nmarchelli.appnovartes.ui.CartActivity
 import com.nmarchelli.appnovartes.ui.ProductActivity
 import com.nmarchelli.appnovartes.ui.ProfileActivity
@@ -42,14 +43,17 @@ class MainActivity : AppCompatActivity() {
     private lateinit var adapter: ArticuloAdapter
     private lateinit var svSearcher: SearchView
     private lateinit var btnUser: ImageButton
-    private lateinit var repo: ArticuloRepository
+    private lateinit var repoArticulos: ArticuloRepository
+    private lateinit var repoConfiguraciones: ConfiguracionRepository
+    private lateinit var db: AppDatabase
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val db = AppDatabase.getInstance(this)
-        repo = ArticuloRepository(ApiClient.apiService, db.articuloDao())
+        db = AppDatabase.getInstance(this)
+        repoArticulos = ArticuloRepository(ApiClient.apiService, db.articuloDao())
+        repoConfiguraciones = ConfiguracionRepository(ApiClient.apiService, db.configuracionDao())
 
         initVariables()
         svSearcher.setIconifiedByDefault(false)
@@ -63,6 +67,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        getConfiguraciones()
 
         getArticulos { articulos ->
             adapter = ArticuloAdapter(articulos) { articuloSeleccionado ->
@@ -121,16 +126,38 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    private fun getArticulos(onLoaded: (List<Articulo>) -> Unit) {
+    private fun getConfiguraciones() {
         CoroutineScope(Dispatchers.IO).launch {
-            val articulos = withContext(Dispatchers.IO) {
-                val local = repo.getArticulosLocal().toDomainList()
+
+            val configuraciones = withContext(Dispatchers.IO) {
+                val local = this@MainActivity.repoConfiguraciones.getConfiguracionesLocal().toDomainList()
                 if (local.isNotEmpty()) {
                     local
                 } else {
                     try {
-                        val remote = repo.getArticulos()
-                        repo.insertAll(remote)
+                        val remote = repoConfiguraciones.getConfiguraciones()
+                        repoConfiguraciones.insertAll(remote)
+                        remote
+                    } catch (e: Exception) {
+                        Log.e(tag, "Error al obtener CONFIGURACIONES de la API: ${e.message}")
+                        emptyList()
+                    }
+                }
+            }
+
+        }
+    }
+
+    private fun getArticulos(onLoaded: (List<Articulo>) -> Unit) {
+        CoroutineScope(Dispatchers.IO).launch {
+            val articulos = withContext(Dispatchers.IO) {
+                val local = this@MainActivity.repoArticulos.getArticulosLocal().toDomainList()
+                if (local.isNotEmpty()) {
+                    local
+                } else {
+                    try {
+                        val remote = repoArticulos.getArticulos()
+                        repoArticulos.insertAll(remote)
                         remote
                     } catch (e: Exception) {
                         Log.e(tag, "Error al obtener artículos de la API: ${e.message}")

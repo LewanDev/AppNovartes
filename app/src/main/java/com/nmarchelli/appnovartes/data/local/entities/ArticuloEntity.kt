@@ -12,7 +12,7 @@ data class ArticuloEntity(
     val rubro: String?,
     val subrubro: String?,
     val destacado: Boolean,
-    val _borrado: Boolean,
+    val _borrado: Int,
     val actualizacion: String, //DATETIME
     val UxB: Int,
     val cod_bar_unidad: String,
