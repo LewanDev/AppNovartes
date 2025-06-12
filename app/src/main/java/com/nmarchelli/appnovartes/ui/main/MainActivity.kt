@@ -29,7 +29,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import com.nmarchelli.appnovartes.domain.models.ArticuloAdapter
-import com.nmarchelli.appnovartes.domain.models.Configuracion
 import com.nmarchelli.appnovartes.ui.CartActivity
 import com.nmarchelli.appnovartes.ui.ProductActivity
 import com.nmarchelli.appnovartes.ui.ProfileActivity
@@ -82,10 +81,10 @@ class MainActivity : AppCompatActivity() {
                 startActivity(intent)
             }
 
-            recyclerView.adapter=adapter
+            recyclerView.adapter = adapter
 
-            svSearcher.setOnQueryTextListener(object: SearchView.OnQueryTextListener{
-                override fun onQueryTextSubmit(query: String?): Boolean =false
+            svSearcher.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String?): Boolean = false
 
                 override fun onQueryTextChange(newText: String?): Boolean {
                     adapter.filter.filter(newText)
@@ -113,10 +112,12 @@ class MainActivity : AppCompatActivity() {
                         startActivity(Intent(this, ProfileActivity::class.java))
                         true
                     }
+
                     R.id.menu_cart -> {
                         startActivity(Intent(this, CartActivity::class.java))
                         true
                     }
+
                     else -> false
                 }
             }
@@ -130,7 +131,8 @@ class MainActivity : AppCompatActivity() {
         CoroutineScope(Dispatchers.IO).launch {
 
             val configuraciones = withContext(Dispatchers.IO) {
-                val local = this@MainActivity.repoConfiguraciones.getConfiguracionesLocal().toDomainList()
+                val local =
+                    this@MainActivity.repoConfiguraciones.getConfiguracionesLocal().toDomainList()
                 if (local.isNotEmpty()) {
                     local
                 } else {

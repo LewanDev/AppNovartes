@@ -10,7 +10,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.nmarchelli.appnovartes.R
@@ -25,12 +24,14 @@ import kotlinx.coroutines.withContext
 class CartActivity : AppCompatActivity() {
 
     private lateinit var db: AppDatabase
-    private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: CartAdapter
 
     private lateinit var btnBack: ImageView
     private lateinit var btnConfirmBuy: Button
+    private lateinit var recyclerView: RecyclerView
     private lateinit var txtTitle: TextView
+
+    private var asuntoMail = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,17 +44,17 @@ class CartActivity : AppCompatActivity() {
 
         setVariables()
         loadCartItems()
-        getClienteData()
 
         btnConfirmBuy.setOnClickListener {
-            //Confirm buy
             CoroutineScope(Dispatchers.IO).launch {
                 val configsMap = getConfiguraciones()
                 val body = setMailBodyText(db)
                 withContext(Dispatchers.Main) {
                     sendMailFromAndroidOS(
-                        this@CartActivity,
-                        configsMap["email"].toString(), "Pedido App - Cliente Nro: "+configsMap["codigo"], body
+                        context = this@CartActivity,
+                        destinatario = configsMap["email"].toString(),
+                        asunto =  asuntoMail,
+                        cuerpo = body
                     )
                 }
             }
@@ -61,12 +62,6 @@ class CartActivity : AppCompatActivity() {
 
         btnBack.setOnClickListener {
             finish()
-        }
-    }
-
-    private fun getClienteData() {
-        lifecycleScope.launch {
-
         }
     }
 
@@ -123,28 +118,30 @@ class CartActivity : AppCompatActivity() {
     suspend fun setMailBodyText(db: AppDatabase): String {
         val items = db.cartDao().getAllItems()
         val cliente = db.clienteDao().getCliente()
+        val sbMailBodyText = StringBuilder()
 
         if (cliente != null) {
-            val sbClienteData = StringBuilder()
-            sbClienteData.append("Datos del Cliente")
-            sbClienteData.append("Nombre: " + cliente.nombreCliente + ", Documento: " + cliente.numeroDto + "\r\n")
-            sbClienteData.append("Domicilio: " + cliente.domicilio + "\r\n")
-            sbClienteData.append("Email: " + cliente.mail + ", Teléfono: " + cliente.telefono + "\r\n")
-            sbClienteData.append("\r\n")
+            asuntoMail = "Pedido App - Cliente Nro: "+ cliente.codigo
+
+            sbMailBodyText.append("Datos del Cliente\r\n")
+            sbMailBodyText.append("Nombre: " + cliente.nombreCliente + ", Documento: " + cliente.numeroDto + "\r\n")
+            sbMailBodyText.append("Domicilio: " + cliente.domicilio + "\r\n")
+            sbMailBodyText.append("Email: " + cliente.mail + ", Teléfono: " + cliente.telefono + "\r\n")
+            sbMailBodyText.append("\r\n")
         }
 
         if (items.isNotEmpty()) {
-            val sbItemsCart = StringBuilder()
-            sbItemsCart.append("Detalle del pedido:\n\n")
+            sbMailBodyText.append("=============================================\n\n")
+            sbMailBodyText.append("Detalle del pedido:\n\n")
             items.forEach { item ->
-                sbItemsCart.append("Producto: ${item.nombre}\n")
-                sbItemsCart.append("Código: ${item.codigo}\n")
-                sbItemsCart.append("Cantidad: ${item.cantidad}\n")
-                sbItemsCart.append("Telas: ${item.telas}, ${item.telas2}\n")
-                sbItemsCart.append("Patas: ${item.patas}, ${item.patas2}\n")
-                sbItemsCart.append("\n")
+                sbMailBodyText.append("Producto: ${item.nombre}\n")
+                sbMailBodyText.append("Código: ${item.codigo}\n")
+                sbMailBodyText.append("Cantidad: ${item.cantidad}\n")
+                sbMailBodyText.append("Telas: ${item.telas}, ${item.telas2}\n")
+                sbMailBodyText.append("Patas: ${item.patas}, ${item.patas2}\n")
+                sbMailBodyText.append("\n")
             }
-            return sbItemsCart.toString()
+            return sbMailBodyText.toString()
         } else {
             return "El carrito está vacío."
         }
