@@ -1,49 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white">
 
     <LinearLayout
-        android:orientation="vertical"
+        style="@style/CustomLinearLayout.Horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:background="@color/white"
-        android:layout_width="match_parent"
-        style="@style/CustomLinearLayout.Horizontal"
-        android:layout_height="wrap_content">
+        android:orientation="vertical">
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:contentDescription="@string/logo"
             android:adjustViewBounds="true"
-            android:src="@drawable/logo"/>
+            android:contentDescription="@string/logo"
+            android:src="@drawable/logo" />
 
         <View
-            android:layout_height="@dimen/height_sm"
-            android:layout_width="match_parent"/>
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/height_sm" />
 
         <EditText
             android:id="@+id/edtUsuario"
-            android:textSize="@dimen/text_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/user" />
+            android:hint="@string/user"
+            android:textSize="@dimen/text_title" />
+
         <View
-            android:layout_height="@dimen/margin_md"
-            android:layout_width="match_parent"/>
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/margin_md" />
+
         <EditText
             android:id="@+id/edtContrasena"
-            android:textSize="@dimen/text_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/password"
-            android:inputType="textPassword" />
+            android:inputType="textPassword"
+            android:textSize="@dimen/text_title" />
 
         <View
-            android:layout_height="@dimen/height_sm"
-            android:layout_width="match_parent"/>
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/height_sm" />
 
         <Button
             android:id="@+id/btnLogin"
@@ -51,5 +52,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/btn_login" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/height_xl" />
+
+        <TextView
+            android:layout_gravity="end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/txt_app_version" />
     </LinearLayout>
 </LinearLayout>

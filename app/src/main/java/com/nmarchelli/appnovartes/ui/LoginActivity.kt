@@ -41,7 +41,7 @@ class LoginActivity : AppCompatActivity() {
             val pass = etPassword.text.toString().trim()
 
             if (user.isEmpty() || pass.isEmpty()) {
-                Toast.makeText(this, "Complete todos los campos", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.txt_complete_fields), Toast.LENGTH_SHORT).show()
             } else {
                 doLogin(user, pass)
             }
@@ -98,14 +98,14 @@ class LoginActivity : AppCompatActivity() {
                 } else {
                     Toast.makeText(
                         this@LoginActivity,
-                        response.body()?.message ?: "Hubo un problema al loguear",
+                        response.body()?.message ?: getString(R.string.txt_loginerror),
                         Toast.LENGTH_SHORT
                     ).show()
                 }
             } catch (e: Exception) {
                 Toast.makeText(
                     this@LoginActivity,
-                    "Error de red: ${e.message}",
+                    "${getString(R.string.txt_networkerror)}: ${e.message}",
                     Toast.LENGTH_LONG
                 ).show()
             }

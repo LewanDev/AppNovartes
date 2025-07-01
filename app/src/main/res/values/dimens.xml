@@ -8,6 +8,8 @@
     <dimen name="height_xs">24dp</dimen>
     <dimen name="height_sm">36dp</dimen>
     <dimen name="height_md">48dp</dimen>
+    <dimen name="height_lg">60dp</dimen>
+    <dimen name="height_xl">72dp</dimen>
 
     <!-- Margins -->
     <dimen name="margin_sm">8dp</dimen>

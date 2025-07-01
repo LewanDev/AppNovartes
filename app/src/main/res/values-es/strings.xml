@@ -16,6 +16,7 @@
     <string name="wrong_user_passwd">Usuario o contraseña incorrecta</string>
     <string name="txt_welcome">Bienvenido</string>
     <string name="txt_profile">Perfil</string>
+    <string name="txt_complete_fields">Complete todos los campos</string>
 
     <string name="txt_list_products">Listado de productos</string>
     <string name="txt_search_products">Buscar productos…</string>
@@ -42,6 +43,7 @@
     <string name="sp_option">Elija una opción…</string>
     <string name="txt_observations">Observaciones</string>
     <string name="txt_addtocart">Agregar al carrito</string>
+    <string name="txt_emptycart">El carrito está vacío</string>
 
     <string name="txt_max_quantity">Cantidad máxima disponible: </string>
     <string name="txt_product_added_tocart">Producto agregado al carrito</string>
@@ -60,4 +62,10 @@
     <string name="txt_yes">Si</string>
     <string name="txt_no">No</string>
     <string name="txt_search">Buscar</string>
+    <string name="txt_sendmail">Enviar mail…</string>
+    <string name="txt_app_version">Versión 1.0</string>
+
+    <string name="txt_loginerror">Hubo un problema al loguear</string>
+    <string name="txt_networkerror">Hubo un error de red</string>
+    <string name="txt_nomailapp">No hay cliente de correo instalado</string>
 </resources>
