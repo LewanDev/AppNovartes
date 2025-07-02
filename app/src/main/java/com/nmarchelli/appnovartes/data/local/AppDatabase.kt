@@ -8,11 +8,13 @@ import com.nmarchelli.appnovartes.data.local.dao.ArticuloDao
 import com.nmarchelli.appnovartes.data.local.dao.CartDao
 import com.nmarchelli.appnovartes.data.local.dao.ClienteDao
 import com.nmarchelli.appnovartes.data.local.dao.ConfiguracionDao
+import com.nmarchelli.appnovartes.data.local.dao.InformePedidoDao
 import com.nmarchelli.appnovartes.data.local.dao.PedidoCabDao
 import com.nmarchelli.appnovartes.data.local.entities.ArticuloEntity
 import com.nmarchelli.appnovartes.data.local.entities.CartItemEntity
 import com.nmarchelli.appnovartes.data.local.entities.ClienteEntity
 import com.nmarchelli.appnovartes.data.local.entities.ConfiguracionEntity
+import com.nmarchelli.appnovartes.data.local.entities.InformePedidoEntity
 import com.nmarchelli.appnovartes.data.local.entities.PedidoCabEntity
 
 @Database(
@@ -21,9 +23,10 @@ import com.nmarchelli.appnovartes.data.local.entities.PedidoCabEntity
         ClienteEntity::class,
         CartItemEntity::class,
         ConfiguracionEntity::class,
-        PedidoCabEntity::class
+        PedidoCabEntity::class,
+        InformePedidoEntity::class
     ],
-    version = 5
+    version = 6
 )
 abstract class AppDatabase : RoomDatabase() {
     abstract fun articuloDao(): ArticuloDao
@@ -31,6 +34,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun cartDao(): CartDao
     abstract fun configuracionDao(): ConfiguracionDao
     abstract fun pedidoCabDao(): PedidoCabDao
+    abstract fun informePedidoDao(): InformePedidoDao
 
     companion object {
         @Volatile

@@ -11,6 +11,6 @@ interface PedidoCabDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(pedidoCab: PedidoCabEntity)
 
-    @Query("SELECT * FROM pedidos_cab LIMIT 1")
+    @Query("SELECT * FROM  pedidos_cab ORDER BY id DESC LIMIT 1")
     suspend fun getLastPedidosCab(): PedidoCabEntity?
 }
