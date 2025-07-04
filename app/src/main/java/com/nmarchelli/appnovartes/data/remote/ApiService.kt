@@ -4,6 +4,7 @@ import com.nmarchelli.appnovartes.domain.models.Articulo
 import com.nmarchelli.appnovartes.domain.models.Configuracion
 import com.nmarchelli.appnovartes.domain.models.InformePedido
 import com.nmarchelli.appnovartes.domain.models.PedidoCab
+import com.nmarchelli.appnovartes.domain.models.PedidoDet
 import com.nmarchelli.appnovartes.domain.models.Rubro
 import retrofit2.Response
 import retrofit2.http.Body
@@ -31,4 +32,6 @@ interface ApiService {
     @GET("api/lastinformepedido.php")
     suspend fun getLastInformePedido(): Response<InformePedido>
 
+    @GET("api/pedidosdet.php")
+    suspend fun getPedidosDet(): Response<List<PedidoDet>>
 }

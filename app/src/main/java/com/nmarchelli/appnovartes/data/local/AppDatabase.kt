@@ -16,6 +16,7 @@ import com.nmarchelli.appnovartes.data.local.entities.ClienteEntity
 import com.nmarchelli.appnovartes.data.local.entities.ConfiguracionEntity
 import com.nmarchelli.appnovartes.data.local.entities.InformePedidoEntity
 import com.nmarchelli.appnovartes.data.local.entities.PedidoCabEntity
+import com.nmarchelli.appnovartes.data.local.entities.PedidoDetEntity
 
 @Database(
     entities = [
@@ -24,9 +25,10 @@ import com.nmarchelli.appnovartes.data.local.entities.PedidoCabEntity
         CartItemEntity::class,
         ConfiguracionEntity::class,
         PedidoCabEntity::class,
-        InformePedidoEntity::class
+        InformePedidoEntity::class,
+        PedidoDetEntity::class
     ],
-    version = 6
+    version = 7
 )
 abstract class AppDatabase : RoomDatabase() {
     abstract fun articuloDao(): ArticuloDao

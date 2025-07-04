@@ -21,6 +21,8 @@ import com.nmarchelli.appnovartes.data.remote.ApiClient
 import com.nmarchelli.appnovartes.data.repository.InformePedidoRepository
 import com.nmarchelli.appnovartes.data.repository.PedidoCabRepository
 import com.nmarchelli.appnovartes.domain.models.CartAdapter
+import com.nmarchelli.appnovartes.domain.models.PedidoCab
+import com.nmarchelli.appnovartes.domain.models.PedidoDet
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -86,6 +88,49 @@ class CartActivity : AppCompatActivity() {
         }
     }
 
+
+
+    private fun generarPedidoCab(clienteId: String, observaciones: String, totalPrecio: String): PedidoCab {
+        val idPedido = null  // o un ID según tu lógica
+        val fechaActual = getCurrentDateTime()
+
+        return PedidoCab(
+            id = idPedido.toString(),
+            creado = fechaActual,
+            cliente = clienteId,
+            observaciones = observaciones,
+            precio = totalPrecio,
+            _borrado = 0,
+            actualizacion = null,
+            id_estado = "1", // pendiente, por ejemplo
+            historial = ""
+        )
+    }
+
+    private fun generarListaPedidoDet(idCab: String, items: List<CartItemEntity>): List<PedidoDet> {
+        return items.mapIndexed { index, item ->
+            PedidoDet(
+                id = 0, // auto en server
+                id_cab = idCab.toIntOrNull() ?: 0,
+                articulo = item.nombre,
+                cantidad = item.cantidad,
+                precio = 0.0, // si no se maneja el precio en cart
+                total_item = 0.0,
+                pos_fila = index + 1,
+                codigo = item.codigo,
+                observacion = "", // podrías agregar uno en el form si querés
+                id_estado = 1,
+                _borrado = 0,
+                plano = "", // o completalo si hay archivo
+                historial = ""
+            )
+        }
+    }
+
+
+
+
+
     private suspend fun getConfiguraciones(): Map<String, String> {
         val list = listOf("email", "nombre", "domicilio", "codigo")
         val configs = db.configuracionDao().getConfiguraciones(list)
@@ -135,7 +180,6 @@ class CartActivity : AppCompatActivity() {
             }
         }
     }
-
 
     suspend fun setMailBodyText(db: AppDatabase, repository: PedidoCabRepository): String {
         val items = db.cartDao().getAllItems()
